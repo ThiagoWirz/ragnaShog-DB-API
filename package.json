@@ -3,9 +3,9 @@
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "dev": "nodemon src/app.ts -L",
+    "dev": "npx nodemon ./src/server.ts -L",
     "test": "NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest"
   },
   "repository": {

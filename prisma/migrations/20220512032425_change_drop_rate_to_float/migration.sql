@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "itensMonsters" ALTER COLUMN "dropRate" SET DATA TYPE DOUBLE PRECISION;
