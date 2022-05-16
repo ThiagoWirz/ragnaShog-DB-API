@@ -2,7 +2,24 @@ import { Request, Response } from "express";
 import * as monsterService from "../services/monsterService.js";
 
 export async function getAll(req: Request, res: Response) {
-  const monsters = await monsterService.getAll();
-
+  let monsters = {};
+  const { page, race, property } = req.query as {
+    page: string;
+    race: string;
+    property: string;
+  };
+  if (!race && !property) {
+    monsters = await monsterService.getAll(parseInt(page));
+  } else if (!race) {
+    monsters = await monsterService.getByProperty(parseInt(page), property);
+  } else if (!property) {
+    monsters = await monsterService.getByRace(parseInt(page), race);
+  } else {
+    monsters = await monsterService.getByRaceAndProperty(
+      parseInt(page),
+      race,
+      property
+    );
+  }
   res.status(200).send(monsters);
 }
