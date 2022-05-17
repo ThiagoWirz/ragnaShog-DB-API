@@ -1,4 +1,5 @@
 import * as monsterRepository from "../repositories/monsterRepository.js";
+import { notFoundError } from "../utils/errorUtils.js";
 
 export async function getAll(page: number) {
   return await monsterRepository.findAll(page);
@@ -18,4 +19,11 @@ export async function getByRaceAndProperty(
   property: string
 ) {
   return await monsterRepository.findByRaceAndProperty(page, race, property);
+}
+
+export async function getById(id: number) {
+  const monster = await monsterRepository.findById(id);
+  if (!monster) notFoundError("Monster not found");
+
+  return monster;
 }

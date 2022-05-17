@@ -23,3 +23,11 @@ export async function getAll(req: Request, res: Response) {
   }
   res.status(200).send(monsters);
 }
+
+export async function getById(req: Request, res: Response) {
+  const { id } = req.params;
+
+  const monster = await monsterService.getById(parseInt(id));
+
+  res.status(200).send(monster);
+}

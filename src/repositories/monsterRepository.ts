@@ -97,3 +97,37 @@ export async function findByRaceAndProperty(
     skip: OFFSET,
   });
 }
+
+export async function findById(id: number) {
+  return await connection.monster.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      stats: {
+        include: {
+          property: true,
+          race: true,
+          size: true,
+        },
+      },
+      mapMonster: {
+        include: {
+          map: true,
+        },
+      },
+      itemMonster: {
+        include: {
+          item: {
+            select: {
+              name: true,
+              category: true,
+              spriteUrl: true,
+              price: true,
+            },
+          },
+        },
+      },
+    },
+  });
+}
