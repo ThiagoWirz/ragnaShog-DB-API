@@ -27,7 +27,9 @@ export async function getAll(req: Request, res: Response) {
 export async function getById(req: Request, res: Response) {
   const { id } = req.params;
 
-  const monster = await monsterService.getById(parseInt(id));
+  const { monster, propertiesTable } = await monsterService.getById(
+    parseInt(id)
+  );
 
-  res.status(200).send(monster);
+  res.status(200).send({ monster, propertiesTable });
 }

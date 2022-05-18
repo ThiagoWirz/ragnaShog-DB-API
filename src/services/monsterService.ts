@@ -1,4 +1,5 @@
 import * as monsterRepository from "../repositories/monsterRepository.js";
+import * as propertyRepository from "../repositories/propertyRepository.js";
 import { notFoundError } from "../utils/errorUtils.js";
 
 export async function getAll(page: number) {
@@ -24,6 +25,9 @@ export async function getByRaceAndProperty(
 export async function getById(id: number) {
   const monster = await monsterRepository.findById(id);
   if (!monster) notFoundError("Monster not found");
+  const propertiesTable = await propertyRepository.getPropertyTable(
+    monster.stats.propertyId
+  );
 
-  return monster;
+  return { monster, propertiesTable };
 }

@@ -60,12 +60,14 @@ model Race {
 }
 
 model Property {
-  id    Int     @id @default(autoincrement())
-  name  String
-  level Int
-  stat  Stat[]
-  skill Skill[]
-  item  Item[]
+  id      Int             @id @default(autoincrement())
+  name    String
+  level   Int
+  stat    Stat[]
+  skill   Skill[]
+  item    Item[]
+  attack  PropertyBonus[] @relation("attack")
+  defense PropertyBonus[] @relation("defense")
 
   @@map("properties")
 }
@@ -195,4 +197,13 @@ model ItemMonster {
   monster   Monster @relation(fields: [monsterId], references: [id])
 
   @@map("itensMonsters")
+}
+
+model PropertyBonus {
+  id            Int      @id @default(autoincrement())
+  defPropertyId Int
+  atkPropertyId Int
+  defProperty   Property @relation("defense", fields: [defPropertyId], references: [id])
+  atkProperty   Property @relation("attack", fields: [atkPropertyId], references: [id])
+  bonus         Int
 }
