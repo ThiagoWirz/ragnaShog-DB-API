@@ -3,7 +3,7 @@ import cors from "cors";
 import "express-async-errors";
 import router from "./routers/index.js";
 import { errorHandlerMiddleware } from "./middlewares/errorHandlerMiddleware.js";
-
+import "./setup.js";
 const app = express();
 
 app.use(cors());

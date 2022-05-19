@@ -9,3 +9,201 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Region {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  map  Map[]
+
+  @@map("regions")
+}
+
+model Map {
+  id         Int          @id @default(autoincrement())
+  name       String       @unique
+  imageUrl   String
+  region     Region       @relation(fields: [regionId], references: [id])
+  regionId   Int
+  entrance   Border[]     @relation("entrance")
+  exit       Border[]     @relation("exit")
+  mapMonster MapMonster[]
+
+
+
+  @@map("maps")
+}
+
+model Border {
+  id            Int @id @default(autoincrement())
+  mapEntrance   Map @relation("entrance", fields: [mapEntranceId], references: [id])
+  mapEntranceId Int
+  mapExit       Map @relation("exit", fields: [mapExitId], references: [id])
+  mapExitId     Int
+
+  @@map("borders")
+}
+
+model Size {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  stat Stat[]
+
+  @@map("sizes")
+}
+
+model Race {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  stat Stat[]
+
+  @@map("races")
+}
+
+model Property {
+  id      Int             @id @default(autoincrement())
+  name    String
+  level   Int
+  stat    Stat[]
+  skill   Skill[]
+  item    Item[]
+  attack  PropertyBonus[] @relation("attack")
+  defense PropertyBonus[] @relation("defense")
+
+  @@map("properties")
+}
+
+model Stat {
+  id           Int       @id @default(autoincrement())
+  attackMin    Int
+  attackMax    Int
+  mAttackMin   Int
+  mAttackMax   Int
+  expBase      Int
+  expJob       Int
+  level        Int
+  hp           Int
+  def          Int
+  mDef         Int
+  str          Int
+  agi          Int
+  vit          Int
+  int          Int
+  dex          Int
+  luk          Int
+  flee         Int
+  hit          Int
+  movSpeed     Float
+  aspd         Float
+  range        Int
+  isBoss       Boolean
+  isAgressive  Boolean
+  helpAllies   Boolean
+  castDetect   Boolean
+  isLooter     Boolean
+  spawnFixed   Boolean
+  changeTarget Boolean
+  hideDetect   Boolean
+  isImmobile   Boolean   @default(false)
+  propertyId   Int
+  property     Property  @relation(fields: [propertyId], references: [id])
+  raceId       Int
+  race         Race      @relation(fields: [raceId], references: [id])
+  sizeId       Int
+  size         Size      @relation(fields: [sizeId], references: [id])
+  monster      Monster[]
+
+  @@map("stats")
+}
+
+model Monster {
+  id           Int            @id @default(autoincrement())
+  name         String
+  spriteUrl    String
+  statsId      Int
+  stats        Stat           @relation(fields: [statsId], references: [id])
+  mapMonster   MapMonster[]
+  monsterSkill MonsterSkill[]
+  itemMonster  ItemMonster[]
+
+  @@map("monsters")
+}
+
+model MapMonster {
+  id        Int     @id @default(autoincrement())
+  mapId     Int
+  map       Map     @relation(fields: [mapId], references: [id])
+  monsterId Int
+  monster   Monster @relation(fields: [monsterId], references: [id])
+  spawnRate Int
+  qty       Int
+
+  @@map("mapsMonsters")
+}
+
+model Skill {
+  id           Int            @id @default(autoincrement())
+  name         String
+  skillLevel   Int
+  propertyId   Int
+  property     Property       @relation(fields: [propertyId], references: [id])
+  monsterSkill MonsterSkill[]
+
+  @@map("skills")
+}
+
+model MonsterSkill {
+  id        Int     @id @default(autoincrement())
+  skillId   Int
+  skill     Skill   @relation(fields: [skillId], references: [id])
+  monsterId Int
+  monster   Monster @relation(fields: [monsterId], references: [id])
+  castTime  Int
+
+  @@map("monstersSkills")
+}
+
+model Item {
+  id           Int           @id @default(autoincrement())
+  name         String
+  category     String
+  description  String
+  weight       Int
+  attack       Int?
+  defense      Int?
+  slot         Int?
+  effects      String?
+  level        Int?
+  reqLevel     Int?
+  reqClass     String[]
+  position     String?
+  price        Int
+  isEquip      Boolean
+  propertyId   Int
+  imageUrl     String
+  spriteUrl    String
+  cardImageUrl String?
+  property     Property      @relation(fields: [propertyId], references: [id])
+  itemMonster  ItemMonster[]
+
+  @@map("itens")
+}
+
+model ItemMonster {
+  id        Int     @id @default(autoincrement())
+  itemId    Int
+  monsterId Int
+  dropRate  Float
+  item      Item    @relation(fields: [itemId], references: [id])
+  monster   Monster @relation(fields: [monsterId], references: [id])
+
+  @@map("itensMonsters")
+}
+
+model PropertyBonus {
+  id            Int      @id @default(autoincrement())
+  defPropertyId Int
+  atkPropertyId Int
+  defProperty   Property @relation("defense", fields: [defPropertyId], references: [id])
+  atkProperty   Property @relation("attack", fields: [atkPropertyId], references: [id])
+  bonus         Int
+}
