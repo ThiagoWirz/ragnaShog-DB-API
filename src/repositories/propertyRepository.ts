@@ -5,5 +5,12 @@ export async function getPropertyTable(id: number) {
     where: {
       defPropertyId: id,
     },
+    include: {
+      atkProperty: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
 }

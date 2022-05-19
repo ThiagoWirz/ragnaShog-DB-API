@@ -124,6 +124,7 @@ export async function findById(id: number) {
               category: true,
               spriteUrl: true,
               price: true,
+              slot: true,
             },
           },
         },
