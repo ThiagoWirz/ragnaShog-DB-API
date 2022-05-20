@@ -27,6 +27,7 @@ model Map {
   entrance   Border[]     @relation("entrance")
   exit       Border[]     @relation("exit")
   mapMonster MapMonster[]
+  isDungeon  Boolean      @default(false)
 
 
 
@@ -34,11 +35,12 @@ model Map {
 }
 
 model Border {
-  id            Int @id @default(autoincrement())
-  mapEntrance   Map @relation("entrance", fields: [mapEntranceId], references: [id])
+  id            Int     @id @default(autoincrement())
+  mapEntrance   Map     @relation("entrance", fields: [mapEntranceId], references: [id])
   mapEntranceId Int
-  mapExit       Map @relation("exit", fields: [mapExitId], references: [id])
+  mapExit       Map     @relation("exit", fields: [mapExitId], references: [id])
   mapExitId     Int
+  location      String?
 
   @@map("borders")
 }

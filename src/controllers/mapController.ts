@@ -6,3 +6,11 @@ export async function getAll(req: Request, res: Response) {
 
   res.status(200).send(maps);
 }
+
+export async function getById(req: Request, res: Response) {
+  const { id } = req.params;
+
+  const map = await mapService.getById(parseInt(id));
+
+  res.status(200).send(map);
+}
