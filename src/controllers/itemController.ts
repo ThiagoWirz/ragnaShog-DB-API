@@ -2,7 +2,13 @@ import { Request, Response } from "express";
 import * as itemService from "../services/itemService.js";
 
 export async function getAll(req: Request, res: Response) {
-  const itens = await itemService.getAll();
+  let itens = {};
+  const { page, category } = req.query as { page: string; category: string };
+
+  if (!category) itens = await itemService.getAll(parseInt(page));
+  else if (category === "Equipamento")
+    itens = await itemService.getByEquip(parseInt(page));
+  else itens = await itemService.getByCategory(parseInt(page), category);
 
   res.status(200).send(itens);
 }
